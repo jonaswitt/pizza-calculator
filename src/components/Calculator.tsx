@@ -193,7 +193,9 @@ const Calculator: React.FC = () => {
                     </tr>
 
                     <tr>
-                        <th>Fresh Yeast (g)</th>
+                        <th>
+                            Fresh Yeast<sup>1</sup> (g)
+                        </th>
                         <td>{yeastWeight.toFixed(1)}</td>
                     </tr>
 
@@ -205,6 +207,14 @@ const Calculator: React.FC = () => {
                     </tr>
                 </tbody>
             </table>
+
+            <p className={styles.footer}>
+                <sup>1</sup> Using the{" "}
+                <a href="https://pizzanapo.fr/topic/3-rafcalc/" target="_blank" rel="noopener">
+                    RafCalc/Japi2
+                </a>{" "}
+                formula
+            </p>
         </div>
     );
 };

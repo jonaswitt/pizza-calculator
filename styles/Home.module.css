@@ -22,7 +22,7 @@
     }
 }
 
-.title a {
+.main a {
     color: #0070f3;
     text-decoration: none;
 }
@@ -120,4 +120,9 @@
 .padRow td,
 .padRow th {
     padding-top: 1.5rem;
+}
+
+.footer {
+    font-size: 80%;
+    color: #444;
 }
