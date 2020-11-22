@@ -10,7 +10,7 @@ export default function Home() {
             </Head>
 
             <main className={styles.main}>
-                <h1 className={styles.title}>Welcome to the Pizza Calculator</h1>
+                <h1 className={styles.title}>🍕 Pizza Calculator 🍕</h1>
 
                 <Calculator />
             </main>
