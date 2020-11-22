@@ -1,4 +1,5 @@
 import Head from 'next/head'
+import Calculator from '../src/components/Calculator'
 import styles from '../styles/Home.module.css'
 
 export default function Home() {
@@ -13,9 +14,7 @@ export default function Home() {
           Welcome to the Pizza Calculator
         </h1>
 
-        <p className={styles.description}>
-          Coming Soon
-        </p>
+        <Calculator />
 
       </main>
     </div>
