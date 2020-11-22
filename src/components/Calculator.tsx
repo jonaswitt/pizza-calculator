@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import queryString from "query-string";
+import styles from "../../styles/Home.module.css";
 
 type FormValues = {
     ballCount: number;
@@ -80,74 +81,130 @@ const Calculator: React.FC = () => {
 
     return (
         <div>
-            <div>
-                Dough Balls:
-                <input
-                    value={values.ballCount}
-                    onChange={(e) => setValues((values) => ({ ...values, ballCount: Number(e.target.value) }))}
-                />
-            </div>
+            <table className={styles.table}>
+                <tbody>
+                    <tr>
+                        <th># Dough Balls</th>
+                        <td>
+                            <input
+                                value={values.ballCount}
+                                onChange={(e) =>
+                                    setValues((values) => ({ ...values, ballCount: Number(e.target.value) }))
+                                }
+                            />
+                        </td>
+                    </tr>
 
-            <div>
-                Dough Ball Weight (g):
-                <input
-                    value={values.ballWeightGrams}
-                    onChange={(e) => setValues((values) => ({ ...values, ballWeightGrams: Number(e.target.value) }))}
-                />
-            </div>
+                    <tr>
+                        <th>Weight per Dough Ball (g)</th>
+                        <td>
+                            <input
+                                value={values.ballWeightGrams}
+                                onChange={(e) =>
+                                    setValues((values) => ({ ...values, ballWeightGrams: Number(e.target.value) }))
+                                }
+                            />
+                        </td>
+                    </tr>
 
-            <div>Dough Total (g): {totalWeight}</div>
+                    <tr>
+                        <th>Dough Total (g)</th>
+                        <td>{totalWeight.toFixed(0)}</td>
+                    </tr>
 
-            <div>
-                Hydration (%):
-                <input
-                    value={values.hydrationPerc}
-                    onChange={(e) => setValues((values) => ({ ...values, hydrationPerc: Number(e.target.value) }))}
-                />
-            </div>
+                    <tr className={styles.padRow}>
+                        <th>Hydration (%)</th>
+                        <td>
+                            <input
+                                value={values.hydrationPerc}
+                                onChange={(e) =>
+                                    setValues((values) => ({ ...values, hydrationPerc: Number(e.target.value) }))
+                                }
+                            />
+                        </td>
+                    </tr>
 
-            <div>Flour (g): {flourWeight.toFixed(0)}</div>
-            <div>Water (g): {waterWeight.toFixed(0)}</div>
+                    <tr>
+                        <th>Flour (g)</th>
+                        <td>{flourWeight.toFixed(0)}</td>
+                    </tr>
 
-            <div>
-                Salt (Grams per Liter):
-                <input
-                    value={values.saltGpl}
-                    onChange={(e) => setValues((values) => ({ ...values, saltGpl: Number(e.target.value) }))}
-                />
-            </div>
+                    <tr>
+                        <th>Water (g)</th>
+                        <td>{waterWeight.toFixed(0)}</td>
+                    </tr>
 
-            <div>
-                Oil (Grams per Liter):
-                <input
-                    value={values.oilGpl}
-                    onChange={(e) => setValues((values) => ({ ...values, oilGpl: Number(e.target.value) }))}
-                />
-            </div>
-            <div>Salt (g): {saltWeight.toFixed(1)}</div>
-            <div>Oil (g): {oilWeight.toFixed(1)}</div>
+                    <tr className={styles.padRow}>
+                        <th>Salt (g/l)</th>
+                        <td>
+                            <input
+                                value={values.saltGpl}
+                                onChange={(e) =>
+                                    setValues((values) => ({ ...values, saltGpl: Number(e.target.value) }))
+                                }
+                            />
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>Salt (g)</th>
+                        <td>{saltWeight.toFixed(1)}</td>
+                    </tr>
 
-            <div>
-                Levitation Temperature (C):
-                <input
-                    value={values.levitationTemperatureC}
-                    onChange={(e) =>
-                        setValues((values) => ({ ...values, levitationTemperatureC: Number(e.target.value) }))
-                    }
-                />
-            </div>
+                    <tr>
+                        <th>Oil (g/l)</th>
+                        <td>
+                            <input
+                                value={values.oilGpl}
+                                onChange={(e) => setValues((values) => ({ ...values, oilGpl: Number(e.target.value) }))}
+                            />
+                        </td>
+                    </tr>
 
-            <div>
-                Levitation Time (h):
-                <input
-                    value={values.levitationTimeHrs}
-                    onChange={(e) => setValues((values) => ({ ...values, levitationTimeHrs: Number(e.target.value) }))}
-                />
-            </div>
+                    <tr>
+                        <th>Oil (g)</th>
+                        <td>{oilWeight.toFixed(1)}</td>
+                    </tr>
 
-            <div>Fresh Yeast (g): {yeastWeight.toFixed(1)}</div>
+                    <tr className={styles.padRow}>
+                        <th>Levitation Temperature (C)</th>
+                        <td>
+                            <input
+                                value={values.levitationTemperatureC}
+                                onChange={(e) =>
+                                    setValues((values) => ({
+                                        ...values,
+                                        levitationTemperatureC: Number(e.target.value),
+                                    }))
+                                }
+                            />
+                        </td>
+                    </tr>
 
-            <button onClick={() => setValues(DEFAULT_VALUES)}>Reset Values</button>
+                    <tr>
+                        <th>Levitation Time (h)</th>
+                        <td>
+                            <input
+                                value={values.levitationTimeHrs}
+                                onChange={(e) =>
+                                    setValues((values) => ({ ...values, levitationTimeHrs: Number(e.target.value) }))
+                                }
+                            />
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <th>Fresh Yeast (g)</th>
+                        <td>{yeastWeight.toFixed(1)}</td>
+                    </tr>
+
+                    <tr className={styles.padRow}>
+                        <th />
+                        <td>
+                            <button onClick={() => setValues(DEFAULT_VALUES)}>Reset Values</button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
         </div>
     );
 };

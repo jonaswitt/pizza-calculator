@@ -102,3 +102,17 @@
         flex-direction: column;
     }
 }
+
+.table th {
+    text-align: left;
+}
+
+.table td,
+.table th {
+    padding-bottom: 0.5rem;
+}
+
+.padRow td,
+.padRow th {
+    padding-top: 1.5rem;
+}
