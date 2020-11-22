@@ -117,6 +117,14 @@
     padding-bottom: 0.5rem;
 }
 
+.table th {
+    width: 67%;
+}
+
+.table td {
+    width: 33%;
+}
+
 .padRow td,
 .padRow th {
     padding-top: 1.5rem;
@@ -125,4 +133,25 @@
 .footer {
     font-size: 80%;
     color: #444;
+}
+
+.numericInput {
+    background-color: rgba(255, 255, 128, 1);
+    text-align: right;
+    border: 0;
+    padding: 0.2rem 0.4rem;
+    font-family: monospace;
+    width: 100%;
+}
+
+.numericOutput {
+    text-align: right;
+    padding: 0.2rem 0.4rem;
+    font-family: monospace;
+}
+
+.resetButton {
+    padding: 0.2rem;
+    text-align: center;
+    width: 100%;
 }

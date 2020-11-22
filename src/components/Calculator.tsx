@@ -45,6 +45,9 @@ const storeValuesQs = (values: FormValues) => {
     window?.history.replaceState(null, null, "?" + serializeValues(values));
 };
 
+const formatNumberOrEmpty = (value: number, options?: Intl.NumberFormatOptions) =>
+    !Number.isNaN(value) ? value.toLocaleString(undefined, options) : "";
+
 const Calculator: React.FC = () => {
     const [values, setValues] = useState<FormValues>(DEFAULT_VALUES);
 
@@ -87,7 +90,8 @@ const Calculator: React.FC = () => {
                         <th># Dough Balls</th>
                         <td>
                             <input
-                                value={values.ballCount}
+                                className={styles.numericInput}
+                                value={formatNumberOrEmpty(values.ballCount, { maximumFractionDigits: 0 })}
                                 onChange={(e) =>
                                     setValues((values) => ({ ...values, ballCount: Number(e.target.value) }))
                                 }
@@ -99,7 +103,8 @@ const Calculator: React.FC = () => {
                         <th>Weight per Dough Ball (g)</th>
                         <td>
                             <input
-                                value={values.ballWeightGrams}
+                                className={styles.numericInput}
+                                value={formatNumberOrEmpty(values.ballWeightGrams, { maximumFractionDigits: 1 })}
                                 onChange={(e) =>
                                     setValues((values) => ({ ...values, ballWeightGrams: Number(e.target.value) }))
                                 }
@@ -109,14 +114,19 @@ const Calculator: React.FC = () => {
 
                     <tr>
                         <th>Dough Total (g)</th>
-                        <td>{totalWeight.toFixed(0)}</td>
+                        <td>
+                            <div className={styles.numericOutput}>
+                                {formatNumberOrEmpty(totalWeight, { maximumFractionDigits: 0 })}
+                            </div>
+                        </td>
                     </tr>
 
                     <tr className={styles.padRow}>
                         <th>Hydration (%)</th>
                         <td>
                             <input
-                                value={values.hydrationPerc}
+                                className={styles.numericInput}
+                                value={formatNumberOrEmpty(values.hydrationPerc, { maximumFractionDigits: 1 })}
                                 onChange={(e) =>
                                     setValues((values) => ({ ...values, hydrationPerc: Number(e.target.value) }))
                                 }
@@ -126,19 +136,28 @@ const Calculator: React.FC = () => {
 
                     <tr>
                         <th>Flour (g)</th>
-                        <td>{flourWeight.toFixed(0)}</td>
+                        <td>
+                            <div className={styles.numericOutput}>
+                                {formatNumberOrEmpty(flourWeight, { maximumFractionDigits: 0 })}
+                            </div>
+                        </td>
                     </tr>
 
                     <tr>
                         <th>Water (g)</th>
-                        <td>{waterWeight.toFixed(0)}</td>
+                        <td>
+                            <div className={styles.numericOutput}>
+                                {formatNumberOrEmpty(waterWeight, { maximumFractionDigits: 0 })}
+                            </div>
+                        </td>
                     </tr>
 
                     <tr className={styles.padRow}>
                         <th>Salt (g/l)</th>
                         <td>
                             <input
-                                value={values.saltGpl}
+                                className={styles.numericInput}
+                                value={formatNumberOrEmpty(values.saltGpl, { maximumFractionDigits: 1 })}
                                 onChange={(e) =>
                                     setValues((values) => ({ ...values, saltGpl: Number(e.target.value) }))
                                 }
@@ -147,14 +166,22 @@ const Calculator: React.FC = () => {
                     </tr>
                     <tr>
                         <th>Salt (g)</th>
-                        <td>{saltWeight.toFixed(1)}</td>
+                        <td>
+                            <div className={styles.numericOutput}>
+                                {formatNumberOrEmpty(saltWeight, {
+                                    minimumFractionDigits: 1,
+                                    maximumFractionDigits: 1,
+                                })}
+                            </div>
+                        </td>
                     </tr>
 
                     <tr>
                         <th>Oil (g/l)</th>
                         <td>
                             <input
-                                value={values.oilGpl}
+                                className={styles.numericInput}
+                                value={formatNumberOrEmpty(values.oilGpl, { maximumFractionDigits: 1 })}
                                 onChange={(e) => setValues((values) => ({ ...values, oilGpl: Number(e.target.value) }))}
                             />
                         </td>
@@ -162,14 +189,19 @@ const Calculator: React.FC = () => {
 
                     <tr>
                         <th>Oil (g)</th>
-                        <td>{oilWeight.toFixed(1)}</td>
+                        <td>
+                            <div className={styles.numericOutput}>
+                                {formatNumberOrEmpty(oilWeight, { minimumFractionDigits: 1, maximumFractionDigits: 1 })}
+                            </div>
+                        </td>
                     </tr>
 
                     <tr className={styles.padRow}>
                         <th>Levitation Temperature (C)</th>
                         <td>
                             <input
-                                value={values.levitationTemperatureC}
+                                className={styles.numericInput}
+                                value={formatNumberOrEmpty(values.levitationTemperatureC, { maximumFractionDigits: 0 })}
                                 onChange={(e) =>
                                     setValues((values) => ({
                                         ...values,
@@ -184,7 +216,8 @@ const Calculator: React.FC = () => {
                         <th>Levitation Time (h)</th>
                         <td>
                             <input
-                                value={values.levitationTimeHrs}
+                                className={styles.numericInput}
+                                value={formatNumberOrEmpty(values.levitationTimeHrs, { maximumFractionDigits: 2 })}
                                 onChange={(e) =>
                                     setValues((values) => ({ ...values, levitationTimeHrs: Number(e.target.value) }))
                                 }
@@ -196,13 +229,22 @@ const Calculator: React.FC = () => {
                         <th>
                             Fresh Yeast<sup>1</sup> (g)
                         </th>
-                        <td>{yeastWeight.toFixed(1)}</td>
+                        <td>
+                            <div className={styles.numericOutput}>
+                                {formatNumberOrEmpty(yeastWeight, {
+                                    minimumFractionDigits: 1,
+                                    maximumFractionDigits: 1,
+                                })}
+                            </div>
+                        </td>
                     </tr>
 
                     <tr className={styles.padRow}>
                         <th />
                         <td>
-                            <button onClick={() => setValues(DEFAULT_VALUES)}>Reset Values</button>
+                            <button className={styles.resetButton} onClick={() => setValues(DEFAULT_VALUES)}>
+                                Reset Values
+                            </button>
                         </td>
                     </tr>
                 </tbody>
