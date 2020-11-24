@@ -7,6 +7,11 @@ export default function Home() {
         <div className={styles.container}>
             <Head>
                 <title>Pizza Calculator</title>
+                <meta
+                    id="viewport"
+                    name="viewport"
+                    content="width=device-width, initial-scale=1.0, maximum-scale=1.0"
+                />
             </Head>
 
             <main className={styles.main}>
