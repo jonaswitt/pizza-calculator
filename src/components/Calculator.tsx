@@ -211,7 +211,7 @@ const Calculator: React.FC = () => {
                             <div className={styles.numericOutput}>
                                 {formatNumberOrEmpty(weights.yeastWeight, {
                                     minimumFractionDigits: 1,
-                                    maximumFractionDigits: 1,
+                                    maximumFractionDigits: 2,
                                 })}
                             </div>
                         </td>
