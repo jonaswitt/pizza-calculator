@@ -1,16 +1,9 @@
 import React, { useEffect, useState } from "react";
 import queryString from "query-string";
 import styles from "../../styles/Home.module.css";
+import { calculateWeights, FormValues } from "../data/dough";
+import NumericInput from "./NumericInput";
 
-type FormValues = {
-    ballCount: number;
-    ballWeightGrams: number;
-    hydrationPerc: number;
-    levitationTemperatureC: number;
-    levitationTimeHrs: number;
-    saltGpl: number;
-    oilGpl: number;
-};
 type QueryStringValues = {
     [P in keyof FormValues]?: string;
 };
@@ -63,24 +56,7 @@ const Calculator: React.FC = () => {
         storeValuesQs(values);
     }, [values]);
 
-    const flourRelativeWeight = 1;
-    const waterRelativeWeight = values.hydrationPerc / 100;
-    const saltRelativeWeight = (values.saltGpl / 1000) * waterRelativeWeight;
-    const oilRelativeWeight = (values.oilGpl / 1000) * waterRelativeWeight;
-    const totalRelativeWeight = waterRelativeWeight + flourRelativeWeight + saltRelativeWeight + oilRelativeWeight;
-
-    const totalWeight = values.ballCount * values.ballWeightGrams;
-    const flourWeight = totalWeight * (flourRelativeWeight / totalRelativeWeight);
-    const waterWeight = totalWeight * (waterRelativeWeight / totalRelativeWeight);
-    const saltWeight = totalWeight * (saltRelativeWeight / totalRelativeWeight);
-    const oilWeight = totalWeight * (oilRelativeWeight / totalRelativeWeight);
-
-    // https://pizzanapo.fr/topic/3-rafcalc/ -- Japi2
-    const yeastWeight =
-        (flourWeight * 2250 * (1 + values.saltGpl / 200) * (1 + values.oilGpl / 300)) /
-        ((-80 + 4.2 * values.hydrationPerc - 0.0305 * values.hydrationPerc ** 2) *
-            values.levitationTemperatureC ** 2.5 *
-            values.levitationTimeHrs ** 1.2);
+    const weights = calculateWeights(values);
 
     return (
         <div>
@@ -89,12 +65,13 @@ const Calculator: React.FC = () => {
                     <tr>
                         <th># Dough Balls</th>
                         <td>
-                            <input
-                                className={styles.numericInput}
-                                value={formatNumberOrEmpty(values.ballCount, { maximumFractionDigits: 0 })}
-                                onChange={(e) =>
-                                    setValues((values) => ({ ...values, ballCount: Number(e.target.value) }))
-                                }
+                            <NumericInput
+                                value={values.ballCount}
+                                onChange={(value) => {
+                                    setValues((values) => ({ ...values, ballCount: value }));
+                                }}
+                                formatOptions={{ maximumFractionDigits: 0 }}
+                                min={1}
                             />
                         </td>
                     </tr>
@@ -102,12 +79,13 @@ const Calculator: React.FC = () => {
                     <tr>
                         <th>Weight per Dough Ball (g)</th>
                         <td>
-                            <input
-                                className={styles.numericInput}
-                                value={formatNumberOrEmpty(values.ballWeightGrams, { maximumFractionDigits: 1 })}
-                                onChange={(e) =>
-                                    setValues((values) => ({ ...values, ballWeightGrams: Number(e.target.value) }))
-                                }
+                            <NumericInput
+                                value={values.ballWeightGrams}
+                                onChange={(value) => {
+                                    setValues((values) => ({ ...values, ballWeightGrams: value }));
+                                }}
+                                formatOptions={{ maximumFractionDigits: 1 }}
+                                min={0}
                             />
                         </td>
                     </tr>
@@ -116,7 +94,7 @@ const Calculator: React.FC = () => {
                         <th>Dough Total (g)</th>
                         <td>
                             <div className={styles.numericOutput}>
-                                {formatNumberOrEmpty(totalWeight, { maximumFractionDigits: 0 })}
+                                {formatNumberOrEmpty(weights.totalWeight, { maximumFractionDigits: 0 })}
                             </div>
                         </td>
                     </tr>
@@ -124,12 +102,14 @@ const Calculator: React.FC = () => {
                     <tr className={styles.padRow}>
                         <th>Hydration (%)</th>
                         <td>
-                            <input
-                                className={styles.numericInput}
-                                value={formatNumberOrEmpty(values.hydrationPerc, { maximumFractionDigits: 1 })}
-                                onChange={(e) =>
-                                    setValues((values) => ({ ...values, hydrationPerc: Number(e.target.value) }))
-                                }
+                            <NumericInput
+                                value={values.hydrationPerc}
+                                onChange={(value) => {
+                                    setValues((values) => ({ ...values, hydrationPerc: value }));
+                                }}
+                                formatOptions={{ maximumFractionDigits: 1 }}
+                                min={0}
+                                max={100}
                             />
                         </td>
                     </tr>
@@ -138,7 +118,7 @@ const Calculator: React.FC = () => {
                         <th>Flour (g)</th>
                         <td>
                             <div className={styles.numericOutput}>
-                                {formatNumberOrEmpty(flourWeight, { maximumFractionDigits: 0 })}
+                                {formatNumberOrEmpty(weights.flourWeight, { maximumFractionDigits: 0 })}
                             </div>
                         </td>
                     </tr>
@@ -147,7 +127,7 @@ const Calculator: React.FC = () => {
                         <th>Water (g)</th>
                         <td>
                             <div className={styles.numericOutput}>
-                                {formatNumberOrEmpty(waterWeight, { maximumFractionDigits: 0 })}
+                                {formatNumberOrEmpty(weights.waterWeight, { maximumFractionDigits: 0 })}
                             </div>
                         </td>
                     </tr>
@@ -155,12 +135,12 @@ const Calculator: React.FC = () => {
                     <tr className={styles.padRow}>
                         <th>Salt (g/l)</th>
                         <td>
-                            <input
-                                className={styles.numericInput}
-                                value={formatNumberOrEmpty(values.saltGpl, { maximumFractionDigits: 1 })}
-                                onChange={(e) =>
-                                    setValues((values) => ({ ...values, saltGpl: Number(e.target.value) }))
-                                }
+                            <NumericInput
+                                value={values.saltGpl}
+                                onChange={(value) => {
+                                    setValues((values) => ({ ...values, saltGpl: value }));
+                                }}
+                                formatOptions={{ maximumFractionDigits: 1 }}
                             />
                         </td>
                     </tr>
@@ -168,7 +148,7 @@ const Calculator: React.FC = () => {
                         <th>Salt (g)</th>
                         <td>
                             <div className={styles.numericOutput}>
-                                {formatNumberOrEmpty(saltWeight, {
+                                {formatNumberOrEmpty(weights.saltWeight, {
                                     minimumFractionDigits: 1,
                                     maximumFractionDigits: 1,
                                 })}
@@ -179,10 +159,12 @@ const Calculator: React.FC = () => {
                     <tr>
                         <th>Oil (g/l)</th>
                         <td>
-                            <input
-                                className={styles.numericInput}
-                                value={formatNumberOrEmpty(values.oilGpl, { maximumFractionDigits: 1 })}
-                                onChange={(e) => setValues((values) => ({ ...values, oilGpl: Number(e.target.value) }))}
+                            <NumericInput
+                                value={values.oilGpl}
+                                onChange={(value) => {
+                                    setValues((values) => ({ ...values, oilGpl: value }));
+                                }}
+                                formatOptions={{ maximumFractionDigits: 1 }}
                             />
                         </td>
                     </tr>
@@ -191,7 +173,10 @@ const Calculator: React.FC = () => {
                         <th>Oil (g)</th>
                         <td>
                             <div className={styles.numericOutput}>
-                                {formatNumberOrEmpty(oilWeight, { minimumFractionDigits: 1, maximumFractionDigits: 1 })}
+                                {formatNumberOrEmpty(weights.oilWeight, {
+                                    minimumFractionDigits: 1,
+                                    maximumFractionDigits: 1,
+                                })}
                             </div>
                         </td>
                     </tr>
@@ -199,15 +184,12 @@ const Calculator: React.FC = () => {
                     <tr className={styles.padRow}>
                         <th>Levitation Temperature (C)</th>
                         <td>
-                            <input
-                                className={styles.numericInput}
-                                value={formatNumberOrEmpty(values.levitationTemperatureC, { maximumFractionDigits: 0 })}
-                                onChange={(e) =>
-                                    setValues((values) => ({
-                                        ...values,
-                                        levitationTemperatureC: Number(e.target.value),
-                                    }))
-                                }
+                            <NumericInput
+                                value={values.levitationTemperatureC}
+                                onChange={(value) => {
+                                    setValues((values) => ({ ...values, levitationTemperatureC: value }));
+                                }}
+                                formatOptions={{ maximumFractionDigits: 0 }}
                             />
                         </td>
                     </tr>
@@ -215,12 +197,12 @@ const Calculator: React.FC = () => {
                     <tr>
                         <th>Levitation Time (h)</th>
                         <td>
-                            <input
-                                className={styles.numericInput}
-                                value={formatNumberOrEmpty(values.levitationTimeHrs, { maximumFractionDigits: 2 })}
-                                onChange={(e) =>
-                                    setValues((values) => ({ ...values, levitationTimeHrs: Number(e.target.value) }))
-                                }
+                            <NumericInput
+                                value={values.levitationTimeHrs}
+                                onChange={(value) => {
+                                    setValues((values) => ({ ...values, levitationTimeHrs: value }));
+                                }}
+                                formatOptions={{ maximumFractionDigits: 2 }}
                             />
                         </td>
                     </tr>
@@ -231,9 +213,9 @@ const Calculator: React.FC = () => {
                         </th>
                         <td>
                             <div className={styles.numericOutput}>
-                                {formatNumberOrEmpty(yeastWeight, {
+                                {formatNumberOrEmpty(weights.yeastWeight, {
                                     minimumFractionDigits: 1,
-                                    maximumFractionDigits: 1,
+                                    maximumFractionDigits: 2,
                                 })}
                             </div>
                         </td>
