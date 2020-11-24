@@ -141,6 +141,7 @@
     border: 0;
     padding: 0.2rem 0.4rem;
     font-family: monospace;
+    font-size: 100%;
     width: 100%;
 }
 
@@ -148,6 +149,7 @@
     text-align: right;
     padding: 0.2rem 0.4rem;
     font-family: monospace;
+    font-size: 100%;
 }
 
 .resetButton {
