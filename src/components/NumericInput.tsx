@@ -27,7 +27,7 @@ const NumericInput: React.FC<{
     min?: number;
     max?: number;
 }> = ({ value, onChange, formatOptions, min, max }) => {
-    const [stringValue, setStringValue] = useState<string>();
+    const [stringValue, setStringValue] = useState<string>("");
     const applyValue = useCallback(
         (newValue: number | undefined, callback = true) => {
             if (newValue != null) {
