@@ -3,10 +3,7 @@ import queryString from "query-string";
 import styles from "../../styles/Home.module.css";
 import { calculateWeights, FormValues } from "../data/dough";
 import NumericInput from "./NumericInput";
-
-type QueryStringValues = {
-    [P in keyof FormValues]?: string;
-};
+import { loadValuesQs, storeValuesQs } from "../data/query";
 
 const DEFAULT_VALUES: FormValues = {
     ballCount: 4,
@@ -16,26 +13,6 @@ const DEFAULT_VALUES: FormValues = {
     levitationTimeHrs: 6,
     saltGpl: 40,
     oilGpl: 0,
-};
-
-const deserializeValues = (qs?: string): Partial<FormValues> => {
-    const query = queryString.parse(qs) as QueryStringValues;
-    const values: Partial<FormValues> = {};
-    for (const key in query) {
-        const value = Number(query[key]);
-        if (!Number.isNaN(value)) {
-            values[key] = value;
-        }
-    }
-    return values;
-};
-
-const loadValuesQs = (): Partial<FormValues> => deserializeValues(window?.location.search);
-
-const serializeValues = (values: FormValues): string => queryString.stringify(values);
-
-const storeValuesQs = (values: FormValues) => {
-    window?.history.replaceState(null, null, "?" + serializeValues(values));
 };
 
 const formatNumberOrEmpty = (value: number, options?: Intl.NumberFormatOptions) =>
